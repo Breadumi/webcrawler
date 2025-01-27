@@ -17,11 +17,8 @@ func normalizeURL(url string) (string, error) {
 		return "", errors.New("malformed URL")
 	}
 
-	fmt.Println(url)
 	host := parsedURL.Host
 	path := parsedURL.Path
-	fmt.Println(host)
-	fmt.Println(path)
 	var normURL string
 
 	hostValid := true
@@ -38,8 +35,6 @@ func normalizeURL(url string) (string, error) {
 	}
 
 	if !pathValid || !hostValid {
-		fmt.Println(pathValid, hostValid)
-		fmt.Println("")
 		return "", errors.New("malformed URL")
 	}
 
@@ -48,8 +43,7 @@ func normalizeURL(url string) (string, error) {
 	} else {
 		normURL = fmt.Sprintf("%v%v", host, path)
 	}
-	fmt.Println(normURL)
-	fmt.Println("")
+
 	return normURL, nil
 
 }
