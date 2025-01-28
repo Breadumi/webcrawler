@@ -18,4 +18,9 @@ func main() {
 	}
 	BASE_URL := args[0]
 	fmt.Printf("starting crawl of: %v\n", BASE_URL)
+	html, err := getHTML(BASE_URL)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(html)
 }
