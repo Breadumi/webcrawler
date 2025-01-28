@@ -27,13 +27,17 @@ func getURLsFromHTML(htmlBody, rawBaseURL string) ([]string, error) {
 		if n.Type == html.ElementNode && n.DataAtom == atom.A {
 			for _, a := range n.Attr {
 				if a.Key == "href" {
-					if _, err := normalizeURL(a.Val); err != nil {
+					if a.Val == "/" {
+						links = append(links, rawBaseURL)
+					} else if _, err := normalizeURL(a.Val); err != nil {
 						if len(a.Val) < 2 {
 							log.Fatal("unexpected anchor element (length less than 2)")
 						}
 						links = append(links, fmt.Sprintf("https://%v%v", normURL, a.Val[1:]))
 					} else {
-						links = append(links, a.Val)
+						//links = append(links, a.Val)
+						//These are external links, don't append them
+						continue
 					}
 
 					break

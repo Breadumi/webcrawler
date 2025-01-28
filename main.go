@@ -4,23 +4,49 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sync"
 )
+
+type config struct {
+	pages              map[string]int
+	baseURL            string
+	mu                 *sync.Mutex
+	concurrencyControl chan struct{}
+	wg                 *sync.WaitGroup
+}
 
 func main() {
 
+	maxConcurrency := 100
+
 	args := os.Args[1:]
-	fmt.Println(args)
+
 	if len(args) < 1 {
 		log.Fatal("no website provided")
 	}
 	if len(args) > 1 {
 		log.Fatal("too many arguments provided")
 	}
-	BASE_URL := args[0]
-	fmt.Printf("starting crawl of: %v\n", BASE_URL)
-	html, err := getHTML(BASE_URL)
-	if err != nil {
-		fmt.Println(err)
+
+	fmt.Printf("starting crawl of: %v\n", args[0])
+
+	pages := make(map[string]int)
+	pages[args[0]] = 1
+
+	cfg := config{
+		pages:              pages,
+		baseURL:            args[0],
+		mu:                 &sync.Mutex{},
+		concurrencyControl: make(chan struct{}, maxConcurrency),
+		wg:                 &sync.WaitGroup{},
 	}
-	fmt.Println(html)
+
+	cfg.wg.Add(1)
+	go cfg.crawlPage(cfg.baseURL)
+	cfg.wg.Wait()
+
+	for key, val := range pages {
+		fmt.Printf("Page: %s\n\tCount: %v\n", key, val)
+	}
+
 }

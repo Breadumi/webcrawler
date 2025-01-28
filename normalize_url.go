@@ -13,6 +13,10 @@ func normalizeURL(url string) (string, error) {
 		return "", err
 	}
 
+	fmt.Printf("Inside normalizeURL: %v\n", url)
+	if len(url) < 8 {
+		return "", errors.New("malformed or path-only URL")
+	}
 	if strings.ToLower(url[0:8]) != "https://" && strings.ToLower(url[0:7]) != "http://" {
 		return "", errors.New("malformed URL")
 	}
