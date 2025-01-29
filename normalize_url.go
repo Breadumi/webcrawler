@@ -13,7 +13,7 @@ func normalizeURL(url string) (string, error) {
 		return "", err
 	}
 
-	fmt.Printf("Inside normalizeURL: %v\n", url)
+	//fmt.Printf("Inside normalizeURL: %v\n", url)
 	if len(url) < 8 {
 		return "", errors.New("malformed or path-only URL")
 	}

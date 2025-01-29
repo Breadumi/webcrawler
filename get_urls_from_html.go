@@ -35,9 +35,8 @@ func getURLsFromHTML(htmlBody, rawBaseURL string) ([]string, error) {
 						}
 						links = append(links, fmt.Sprintf("https://%v%v", normURL, a.Val[1:]))
 					} else {
-						//links = append(links, a.Val)
-						//These are external links, don't append them
-						continue
+						links = append(links, a.Val)
+						//These are external links, don't crawl them
 					}
 
 					break
